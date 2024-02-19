@@ -7,7 +7,10 @@
 </head>
 <body>
     <h1>User Input Form</h1>
-    <form action="/submit" method="post" onsubmit="">
+    <% if (typeof error !== 'undefined' && error) { %>
+        <p style="color: red;"><%= error %></p>
+    <% } %>
+    <form action="/submit" method="post" onsubmit="return validateForm()">
         <label for="userName">Name:</label>
         <input type="text" id="userName" name="userName" required>
         <br>
@@ -26,8 +29,38 @@
         <span id="passwordError" class="error"></span>
         <br>
 
+        <label for="gender">Gender:</label>
+        <input type="radio" id="male" name="gender" value="male">
+        <input type="radio" id="female" name="gender" value="female">
+        <br>
+
         <button type="submit">Submit</button>
     </form>
 
+    <script>
+        function validateForm() {
+            var userName = document.getElementById("userName").value;
+            if (userName.trim() === "") {
+                alert("Please enter your name.");
+                return false;
+            }
+            var userEmail = document.getElementById("userEmail").value;
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(userEmail)) {
+                document.getElementById("emailError").innerHTML = "Invalid email address.";
+                return false;
+            } else {
+                document.getElementById("emailError").innerHTML = "";
+            }
+            var userPassword = document.getElementById("userPassword").value;
+            if (userPassword.length < 8) {
+                document.getElementById("passwordError").innerHTML = "Password must be at least 8 characters.";
+                return false;
+            } else {
+                document.getElementById("passwordError").innerHTML = "";
+            }
+            return true;
+        }
+    </script>
 </body>
 </html>
